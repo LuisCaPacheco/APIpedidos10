@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request, Depends, HTTPException
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from starlette.templating import Jinja2Templates, jinja2
 from typing import Optional
 import uuid
 
