@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request, Depends, HTTPException
 from pydantic import BaseModel
-from starlette.templating import Jinja2Templates
+from starlette.templating import Jinja2Templates, jinja2
 from typing import Optional
 import uuid
 
@@ -67,3 +67,4 @@ def obtener_pedido(pedido_id: uuid.UUID):
     if not pedido:
         raise HTTPException(status_code=404, detail="Pedido no encontrado")
     return pedido
+
