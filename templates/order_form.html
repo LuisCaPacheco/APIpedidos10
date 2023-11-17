@@ -3,46 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Pedido</title>
+    <title>Sistema de Pedidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+      
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+      
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+      
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+      
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+      
+        button:hover {
+            background-color: #45a049;
+        }
+      
+        #orders {
+            margin-top: 20px;
+        }
+        </style>
 </head>
-<body>
-    <h1>Información del Usuario</h1>
+
+    <body>
+
+        <h2>Crear Pedido</h2>
+
+        <h1>Información del Usuario</h1>
     <form id="userInfoForm">
         <label for="userId">ID de Usuario:</label>
         <input type="text" id="userId" name="userId" required><br><br>
-        <label for="userName">Nombre de Usuario:</label>
-        <input type="text" id="userName" name="userName" required><br><br>
+        <label for="clientName">Nombre de Usuario:</label>
+        <input type="text" id="clientName" name="uclientName" required><br><br>
         <label for="userEmail">Correo Electrónico:</label>
         <input type="email" id="userEmail" name="userEmail" required><br><br>
-        <input type="submit" value="Enviar">
     </form>
-    <br>
-    <h1>Crear Pedido</h1>
     <form id="orderForm">
-        <label for="orderId">ID de Pedido:</label>
+        <label for="orderId">ID del Producto:</label>
         <input type="text" id="orderId" name="orderId" required><br><br>
-        <label for="orderDescription">Descripción del Pedido:</label>
-        <input type="text" id="orderDescription" name="orderDescription" required><br><br>
-        <input type="submit" value="Crear Pedido">
     </form>
-    <br>
-    <h1>Pedidos Completados</h1>
-    <div id="completedOrders"></div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        // Manejar el envío del formulario de información del usuario
-        $('#userInfoForm').on('submit', function(e) {
-            e.preventDefault();
-            // ... Procesar la información del usuario
-        });
-
-        // Manejar el envío del formulario de creación de pedidos
-        $('#orderForm').on('submit', function(e) {
-            e.preventDefault();
-            // ... Procesar la información del pedido
-            // ... Recuperar la información de los pedidos completados
-            // ... Mostrar la información de los pedidos completados
-        });
-    </script>
-</body>
-</html>
+        <label for="product">Producto:</label>
+        <input type="text" id="product" required><br><br>
+      
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" required><br><br>
+      
+        <button type="button" onclick="addOrder()">Crear Pedido</button>
+        </form>
+      
+        <h2>Listado de Pedidos</h2>
+        <ul id="orders"></ul>
+      
+        <script>
+          function addOrder() {
+            var clientName = document.getElementById('clientName').value;
+            var product = document.getElementById('product').value;
+            var quantity = document.getElementById('quantity').value;
+            var userId = document.getElementById('userId').value;
+            var userEmail = document.getElementById('userEmail').value;
+            var orderId = document.getElementById('orderId').value;
+            
+      
+            var order = {
+              clientName: clientName,
+              product: product,
+              quantity: quantity,
+              userId: userId,
+              userEmail: userEmail,
+              orderId: orderId,
+              
+            };
+      
+            // Obtener pedidos existentes o inicializar si es la primera vez
+            var orders = JSON.parse(localStorage.getItem('orders')) || [];
+      
+            // Agregar el nuevo pedido
+            orders.push(order);
+      
+            // Guardar en el almacenamiento local
+            localStorage.setItem('orders', JSON.stringify(orders));
+      
+            // Actualizar la lista de pedidos
+            updateOrderList();
+      
+            // Limpiar el formulario
+            document.getElementById('orderForm').reset();
+          }
+      
+          function updateOrderList() {
+            var orders = JSON.parse(localStorage.getItem('orders')) || [];
+            var ordersList = document.getElementById('orders');
+      
+            // Limpiar la lista
+            ordersList.innerHTML = '';
+      
+            // Mostrar cada pedido en la lista
+            orders.forEach(function(order) {
+              var li = document.createElement('li');
+              li.textContent = `${order.userId} - ${order.clientName} - ${order.userEmail} - ${order.orderId} - ${order.product} (Cantidad: ${order.quantity})`;
+              ordersList.appendChild(li);
+            });
+          }
+      
+          // Actualizar la lista al cargar la página
+          updateOrderList();
+        </script>
+      
+      </body>
+      </html>
